@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class = 'container'>
+  <h3> Hello {{ g.user['username'] }}</h3>
+    <br>
+    {% if g.user %}
+        <p>Users currently registered:</p>
+        <ul>
+            {% for user in users %}
+                <li>{{user.username}}
+                  <a href="{{ url_for('crud', userid = user.id) }}"> Show </a>
+                  <button onclick="deleteRequest('{{ url_for('crud', userid = user.id) }}')" > Delete </button>
+                  <button onclick="showEdit({{user.id}})"> Edit </button>
+                      <dl class = "{{user.id}}">
+                          <dt>Username:
+                          <dd><input type=text id="name{{user.id}}" value={{user.username}}>
+                          <dt>Email:
+                          <dd><input type=text id="email{{user.id}}" value={{user.email}}>
+                          <dt>Password:
+                          <dd><input type=password id="password{{user.id}}">
+                          <dd><button onclick="editRequest('{{ url_for('crud', userid = user.id) }}', '{{user.id}}' )">Update</button> 
+                      </dl>
+                 
+                </li>
+            {% endfor %}
+        </ul>
+  {% else %}
+        <p>Please register !</p>
+  {% endif %}
+
+  {% block javascripts %}
+        <script>
+
+          $('dl').hide();
+          function showEdit(id)
+            {
+              $("."+ id).toggle()
+            }
+
+            function deleteRequest(url)
+            {
+              $.ajax({
+                url:  url,
+                type: "DELETE",
+                async: true,
+                success: function(){
+                  alert("User deleted");}
+              });
+            }
+
+            function editRequest(url, id)
+            {
+                $.ajax({
+                  url:  url,
+                  type: "PUT",
+                  async: true,
+                  data: {name: $("#name" + id).val(), 
+                    email: $("#email" + id).val(), 
+                    password: $("#password" + id).val()},
+                  success: function(){
+                    alert("User Updated");},
+                });
+            }
+        </script>
+  {% endblock %}
+
+</div>
+{% endblock %}
+
+

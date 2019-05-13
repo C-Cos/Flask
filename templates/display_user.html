@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class = 'container'>
+    {% if g.user %}
+        <p>For User '{{user.username}}':</p>
+        <ul>
+            <li>Username : {{user.username}}</li>
+            <li>Email : {{user.email}}</li>
+            <li>Password : {{user.password}}</li>
+        </ul>
+  {% else %}
+    {{ url_for('show_entries') }}
+  {% endif %}
+
+</div>
+{% endblock %}
